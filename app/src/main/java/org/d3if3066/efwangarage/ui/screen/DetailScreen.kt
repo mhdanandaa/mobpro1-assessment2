@@ -12,6 +12,8 @@ fun DetailScreen(navController: NavHostController) {
 
 }
 
+
+
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
