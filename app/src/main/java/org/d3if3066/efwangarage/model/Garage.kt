@@ -8,9 +8,8 @@ data class Garage(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
     val merkMobil: String,
-    val tipeMobil: String,
+    val jenisMobil: String,
     val tahunKeluaran: String,
     val warnaMobil: String,
-    val status: String
-
+    val status: String,
 )
