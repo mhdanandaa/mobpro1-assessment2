@@ -9,7 +9,7 @@ data class Garage(
     val id: Long = 0L,
     val merkMobil: String,
     val jenisMobil: String,
-    val tahunKeluaran: String,
     val warnaMobil: String,
+    val tahunKeluaran: String,
     val status: String,
 )

@@ -9,12 +9,12 @@ import org.d3if3066.efwangarage.model.Garage
 
 class DetailViewModel(private val dao: GarageDao): ViewModel() {
 
-    fun insert(merkMobil: String, jenisMobil: String, tahunKeluaran: String, warnaMobil: String, status: String) {
+    fun insert(merkMobil: String, jenisMobil: String, warnaMobil: String, tahunKeluaran: String, status: String) {
         val garage = Garage(
             merkMobil = merkMobil,
             jenisMobil = jenisMobil,
-            tahunKeluaran = tahunKeluaran,
             warnaMobil = warnaMobil,
+            tahunKeluaran = tahunKeluaran,
             status = status
         )
 
@@ -22,4 +22,9 @@ class DetailViewModel(private val dao: GarageDao): ViewModel() {
             dao.insert(garage)
         }
     }
+
+    suspend fun getCar(id: Long): Garage? {
+        return dao.getCarById(id)
+    }
+
 }

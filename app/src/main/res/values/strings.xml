@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">Efwan Garage</string>
     <string name="tambah_mobil">Tambah Mobil</string>
+    <string name="list_kosong">Belum ada data mobil</string>
+    <string name="kembali">Kembali</string>
+    <string name="tambah_mahasiswa">Tambah Mobil</string>
+    <string name="edit_mahasiswa">Edit Keterangan Mobil</string>
+    <string name="simpan">Simpan</string>
+    <string name="merk_mobil">Merk Mobil</string>
+    <string name="jenis_mobil">Jenis Mobil</string>
+    <string name="warna_mobil">Warna Mobil</string>
+    <string name="tahun">Tahun Keluaran</string>
+    <string name="invalid">Data tidak boleh ada yang kosong!</string>
 </resources>
