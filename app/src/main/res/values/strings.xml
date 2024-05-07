@@ -11,4 +11,9 @@
     <string name="warna_mobil">Warna Mobil</string>
     <string name="tahun">Tahun Keluaran</string>
     <string name="invalid">Data tidak boleh ada yang kosong!</string>
+    <string name="opsi_lainnya">Opsi Lainnya</string>
+    <string name="hapus_mobil">Hapus Mobil</string>
+    <string name="hapus_pesan">Hapus data mobil ini?</string>
+    <string name="tombol_hapus">Hapus</string>
+    <string name="tombol_batal">Batal</string>
 </resources>
