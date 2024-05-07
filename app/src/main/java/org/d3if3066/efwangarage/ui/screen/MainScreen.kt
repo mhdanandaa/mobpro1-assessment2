@@ -1,5 +1,6 @@
 package org.d3if3066.efwangarage.ui.screen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Divider
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -29,10 +35,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -92,14 +100,14 @@ fun MainScreen(navController: NavHostController) {
             }
         }
     ) { padding ->
-        ScreenContent(Modifier.padding(padding), navController)
+        ScreenContent(showList,Modifier.padding(padding), navController)
 
     }
 
 }
 
 @Composable
-fun ScreenContent(modifier: Modifier, navController: NavHostController) {
+fun ScreenContent(showList: Boolean, modifier: Modifier, navController: NavHostController) {
     val context = LocalContext.current
     val db = GarageDb.getInstance(context)
     val factory = ViewModelFactory(db.dao)
@@ -118,16 +126,33 @@ fun ScreenContent(modifier: Modifier, navController: NavHostController) {
         }
 
     } else {
-        LazyColumn(
-            modifier = modifier
-                .fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 84.dp)
-        ) {
-            items(data) {
-                ListItems(garage = it) {
-                    navController.navigate(Screen.FormUbah.withId(it.id))
+        if(showList) {
+            LazyColumn(
+                modifier = modifier
+                    .fillMaxSize(),
+                contentPadding = PaddingValues(bottom = 84.dp)
+            ) {
+                items(data) {
+                    ListItems(garage = it) {
+                        navController.navigate(Screen.FormUbah.withId(it.id))
+                    }
+                    Divider()
                 }
-                Divider()
+            }
+        }
+        else {
+            LazyVerticalStaggeredGrid(
+                modifier = modifier.fillMaxSize(),
+                columns = StaggeredGridCells.Fixed(3),
+                verticalItemSpacing = 8.dp,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 84.dp)
+            ) {
+                items(data) {
+                    GridItem(garage = it) {
+                        navController.navigate(Screen.FormUbah.withId(it.id))
+                    }
+                }
             }
         }
     }
@@ -160,6 +185,40 @@ fun ListItems(garage: Garage, onClick: () -> Unit) {
 
     }
 
+}
+
+@Composable
+fun GridItem(garage: Garage, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(1.dp, Color.Cyan)
+    ) {
+       Column(
+           modifier = Modifier.padding(8.dp),
+           verticalArrangement = Arrangement.spacedBy(8.dp)
+       ) {
+           Text(
+               text = garage.merkMobil,
+               fontWeight = FontWeight.Bold
+           )
+           Text(
+               text = garage.jenisMobil,
+               overflow = TextOverflow.Ellipsis
+           )
+           Text(text = garage.warnaMobil)
+           Text(text = garage.tahunKeluaran)
+           Text(
+               text = garage.status,
+               fontWeight = FontWeight.Bold
+           )
+
+       }
+    }
 }
 @Preview(showBackground = true)
 @Composable
