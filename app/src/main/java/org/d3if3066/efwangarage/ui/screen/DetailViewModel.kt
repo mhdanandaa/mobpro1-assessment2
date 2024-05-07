@@ -27,4 +27,21 @@ class DetailViewModel(private val dao: GarageDao): ViewModel() {
         return dao.getCarById(id)
     }
 
+    fun update(id: Long, merkMobil: String, jenisMobil: String, warnaMobil: String, tahunKeluaran: String, status: String) {
+        val garage = Garage(
+            id = id,
+            merkMobil = merkMobil,
+            jenisMobil = jenisMobil,
+            warnaMobil = warnaMobil,
+            tahunKeluaran = tahunKeluaran,
+            status = status
+        )
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.update(garage)
+        }
+
+    }
+
+
+
 }

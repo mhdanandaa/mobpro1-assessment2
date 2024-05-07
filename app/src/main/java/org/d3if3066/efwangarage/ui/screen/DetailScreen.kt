@@ -117,6 +117,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                         if(id == null) {
                             viewModel.insert(merkMobil,jenisMobil,warnaMobil,tahuKeluaran,status)
                         } else {
+                            viewModel.update(id, merkMobil, jenisMobil, warnaMobil, tahuKeluaran, status)
 
                         }
                         navController.popBackStack()
