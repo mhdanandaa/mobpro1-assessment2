@@ -104,10 +104,10 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                 },
                 title = {
                     if(id == null) {
-                        Text(text = stringResource(id = R.string.tambah_car))
+                        Text(text = stringResource(id = R.string.tambah_mobil))
                     }
                     else {
-                        Text(text = stringResource(id = R.string.edit_car))
+                        Text(text = stringResource(id = R.string.edit_mobil))
                     }
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(

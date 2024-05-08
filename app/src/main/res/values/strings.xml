@@ -3,8 +3,7 @@
     <string name="tambah_mobil">Tambah Mobil</string>
     <string name="list_kosong">Belum ada data mobil</string>
     <string name="kembali">Kembali</string>
-    <string name="tambah_car">Tambah Mobil</string>
-    <string name="edit_car">Edit Keterangan Mobil</string>
+    <string name="edit_mobil">Edit Keterangan Mobil</string>
     <string name="simpan">Simpan</string>
     <string name="merk_mobil">Merk Mobil</string>
     <string name="jenis_mobil">Jenis Mobil</string>
