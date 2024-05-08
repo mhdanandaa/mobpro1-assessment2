@@ -41,6 +41,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,7 +52,6 @@ import androidx.navigation.compose.rememberNavController
 import org.d3if3066.efwangarage.R
 import org.d3if3066.efwangarage.database.GarageDb
 import org.d3if3066.efwangarage.ui.theme.EfwanGarageTheme
-import org.d3if3066.efwangarage.ui.theme.Purple80
 import org.d3if3066.efwangarage.util.ViewModelFactory
 
 const val KEY_ID_CAR = "idGarage"
@@ -98,7 +98,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = stringResource(id = R.string.kembali),
-                            tint = Color.White
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 },
@@ -111,8 +111,8 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                     }
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = Purple80,
-                    titleContentColor = Color.White
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary
                 ),
                 actions = {
                     IconButton(onClick = {
@@ -138,7 +138,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                         Icon(
                             imageVector = Icons.Outlined.Check,
                             contentDescription = stringResource(id = R.string.simpan),
-                            tint = Color.White
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                     if(id != null) {
@@ -184,7 +184,7 @@ fun DeleteData(delete: () -> Unit) {
         Icon(
             imageVector = Icons.Filled.MoreVert,
             contentDescription = stringResource(R.string.opsi_lainnya),
-            tint = Color.White
+            tint = MaterialTheme.colorScheme.primary
         )
 
         DropdownMenu(
@@ -227,6 +227,7 @@ fun FormGarage(
             label = {Text(text = stringResource(R.string.merk_mobil))},
             singleLine = true,
             keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Words,
                 imeAction = ImeAction.Next
             ),
             modifier = Modifier.fillMaxWidth()
@@ -238,6 +239,7 @@ fun FormGarage(
             label = {Text(text = stringResource(R.string.jenis_mobil))},
             singleLine = true,
             keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Words,
                 imeAction = ImeAction.Next
             ),
             modifier = Modifier.fillMaxWidth()
@@ -249,6 +251,7 @@ fun FormGarage(
             label = {Text(text = stringResource(R.string.warna_mobil))},
             singleLine = true,
             keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Words,
                 imeAction = ImeAction.Next
             ),
             modifier = Modifier.fillMaxWidth()
@@ -298,7 +301,7 @@ fun StatusOption(label: String, isSelected: Boolean, modifier: Modifier) {
     ){
         RadioButton(
             selected = isSelected,
-            onClick = null
+            onClick = null,
         )
         Text(
             text = label,

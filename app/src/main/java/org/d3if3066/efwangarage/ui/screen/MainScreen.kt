@@ -1,5 +1,6 @@
 package org.d3if3066.efwangarage.ui.screen
 
+import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,7 +33,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -51,7 +51,6 @@ import org.d3if3066.efwangarage.database.GarageDb
 import org.d3if3066.efwangarage.model.Garage
 import org.d3if3066.efwangarage.navigation.Screen
 import org.d3if3066.efwangarage.ui.theme.EfwanGarageTheme
-import org.d3if3066.efwangarage.ui.theme.Purple80
 import org.d3if3066.efwangarage.util.SettingsDataStore
 import org.d3if3066.efwangarage.util.ViewModelFactory
 
@@ -68,9 +67,9 @@ fun MainScreen(navController: NavHostController) {
                 title = { Text(text = stringResource(id = R.string.app_name)) },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
                     //Untuk Backround
-                    containerColor = Purple80,
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
                     //Untuk Judul
-                    titleContentColor = Color.White
+                    titleContentColor = MaterialTheme.colorScheme.primary
                 ),
                 actions = {
                     IconButton(onClick = {
@@ -87,7 +86,7 @@ fun MainScreen(navController: NavHostController) {
                                 if(showList) R.string.grid
                                 else R.string.list
                             ),
-                            tint = Color.White
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 }
@@ -97,13 +96,12 @@ fun MainScreen(navController: NavHostController) {
             FloatingActionButton(
                 onClick = {
                     navController.navigate(Screen.FormBaru.route)
-                },
-                containerColor = Purple80
+                }
             ) {
                 Icon(
                     imageVector = Icons.Filled.Add,
                     contentDescription = stringResource(id = R.string.tambah_mobil),
-                    tint = Color.White
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
         }
@@ -204,7 +202,7 @@ fun GridItem(garage: Garage, onClick: () -> Unit) {
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        border = BorderStroke(1.dp, Purple80)
+        border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.primary)
     ) {
        Column(
            modifier = Modifier.padding(8.dp),
@@ -229,6 +227,7 @@ fun GridItem(garage: Garage, onClick: () -> Unit) {
     }
 }
 @Preview(showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 fun MainScreenPreview() {
     EfwanGarageTheme {
