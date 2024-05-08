@@ -44,12 +44,14 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if3066.efwangarage.R
 import org.d3if3066.efwangarage.database.GarageDb
 import org.d3if3066.efwangarage.ui.theme.EfwanGarageTheme
+import org.d3if3066.efwangarage.ui.theme.Purple80
 import org.d3if3066.efwangarage.util.ViewModelFactory
 
 const val KEY_ID_CAR = "idGarage"
@@ -96,26 +98,32 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = stringResource(id = R.string.kembali),
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = Color.White
                         )
                     }
                 },
                 title = {
                     if(id == null) {
-                        Text(text = stringResource(id = R.string.tambah_mahasiswa))
+                        Text(text = stringResource(id = R.string.tambah_car))
                     }
                     else {
-                        Text(text = stringResource(id = R.string.edit_mahasiswa))
+                        Text(text = stringResource(id = R.string.edit_car))
                     }
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary
+                    containerColor = Purple80,
+                    titleContentColor = Color.White
                 ),
                 actions = {
                     IconButton(onClick = {
                         if(merkMobil == "" || jenisMobil == "" || warnaMobil == "" || tahuKeluaran == "" || status == "") {
                             Toast.makeText(context, R.string.invalid, Toast.LENGTH_LONG).show()
+                            return@IconButton
+                        } else if(merkMobil.isDigitsOnly()){
+                            Toast.makeText(context, R.string.invalid_merk, Toast.LENGTH_LONG).show()
+                            return@IconButton
+                        } else if(tahuKeluaran == "0") {
+                            Toast.makeText(context, R.string.tahun_nol, Toast.LENGTH_LONG).show()
                             return@IconButton
                         }
 
@@ -130,7 +138,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                         Icon(
                             imageVector = Icons.Outlined.Check,
                             contentDescription = stringResource(id = R.string.simpan),
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = Color.White
                         )
                     }
                     if(id != null) {
@@ -176,7 +184,7 @@ fun DeleteData(delete: () -> Unit) {
         Icon(
             imageVector = Icons.Filled.MoreVert,
             contentDescription = stringResource(R.string.opsi_lainnya),
-            tint = MaterialTheme.colorScheme.primary
+            tint = Color.White
         )
 
         DropdownMenu(

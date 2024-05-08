@@ -16,7 +16,7 @@ interface GarageDao {
     @Update
     suspend fun update(garage: Garage)
 
-    @Query("SELECT * FROM garage ORDER BY tahunKeluaran ASC")
+    @Query("SELECT * FROM garage ORDER BY status = 'Tersedia' DESC")
     fun getCar(): Flow<List<Garage>>
 
     @Query("SELECT * FROM garage WHERE id = :id")

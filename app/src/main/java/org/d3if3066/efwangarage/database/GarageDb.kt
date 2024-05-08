@@ -5,7 +5,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import org.d3if3066.efwangarage.model.Garage
-import javax.xml.validation.Schema
 
 @Database(entities = [Garage::class], version = 1, exportSchema = false)
 abstract class GarageDb: RoomDatabase() {

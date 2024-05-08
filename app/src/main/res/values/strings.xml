@@ -3,8 +3,8 @@
     <string name="tambah_mobil">Tambah Mobil</string>
     <string name="list_kosong">Belum ada data mobil</string>
     <string name="kembali">Kembali</string>
-    <string name="tambah_mahasiswa">Tambah Mobil</string>
-    <string name="edit_mahasiswa">Edit Keterangan Mobil</string>
+    <string name="tambah_car">Tambah Mobil</string>
+    <string name="edit_car">Edit Keterangan Mobil</string>
     <string name="simpan">Simpan</string>
     <string name="merk_mobil">Merk Mobil</string>
     <string name="jenis_mobil">Jenis Mobil</string>
@@ -18,4 +18,6 @@
     <string name="tombol_batal">Batal</string>
     <string name="list">Tampilan list</string>
     <string name="grid">Tampilan grid</string>
+    <string name="invalid_merk">Merk mobil harus mengandung huruf</string>
+    <string name="tahun_nol">Tahun tidak boleh 0</string>
 </resources>

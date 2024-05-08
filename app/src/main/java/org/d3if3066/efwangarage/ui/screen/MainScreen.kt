@@ -9,15 +9,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Divider
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -30,9 +30,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,18 +43,24 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.d3if3066.efwangarage.R
 import org.d3if3066.efwangarage.database.GarageDb
 import org.d3if3066.efwangarage.model.Garage
 import org.d3if3066.efwangarage.navigation.Screen
 import org.d3if3066.efwangarage.ui.theme.EfwanGarageTheme
+import org.d3if3066.efwangarage.ui.theme.Purple80
+import org.d3if3066.efwangarage.util.SettingsDataStore
 import org.d3if3066.efwangarage.util.ViewModelFactory
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavHostController) {
-    var showList by remember{ mutableStateOf(true) }
+    val dataStore = SettingsDataStore(LocalContext.current)
+    val showList by dataStore.layoutFlow.collectAsState(true)
 
     Scaffold(
         topBar = {
@@ -65,12 +68,16 @@ fun MainScreen(navController: NavHostController) {
                 title = { Text(text = stringResource(id = R.string.app_name)) },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
                     //Untuk Backround
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    containerColor = Purple80,
                     //Untuk Judul
-                    titleContentColor = MaterialTheme.colorScheme.primary
+                    titleContentColor = Color.White
                 ),
                 actions = {
-                    IconButton(onClick = {showList = !showList}) {
+                    IconButton(onClick = {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            dataStore.saveLayout(!showList)
+                        }
+                    }) {
                         Icon(
                             painter = painterResource(
                                 if (showList) R.drawable.baseline_grid_view_24
@@ -80,7 +87,7 @@ fun MainScreen(navController: NavHostController) {
                                 if(showList) R.string.grid
                                 else R.string.list
                             ),
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = Color.White
                         )
                     }
                 }
@@ -90,12 +97,13 @@ fun MainScreen(navController: NavHostController) {
             FloatingActionButton(
                 onClick = {
                     navController.navigate(Screen.FormBaru.route)
-                }
+                },
+                containerColor = Purple80
             ) {
                 Icon(
                     imageVector = Icons.Filled.Add,
                     contentDescription = stringResource(id = R.string.tambah_mobil),
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = Color.White
                 )
             }
         }
@@ -143,7 +151,7 @@ fun ScreenContent(showList: Boolean, modifier: Modifier, navController: NavHostC
         else {
             LazyVerticalStaggeredGrid(
                 modifier = modifier.fillMaxSize(),
-                columns = StaggeredGridCells.Fixed(3),
+                columns = StaggeredGridCells.Fixed(2),
                 verticalItemSpacing = 8.dp,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 84.dp)
@@ -165,7 +173,7 @@ fun ListItems(garage: Garage, onClick: () -> Unit) {
             .fillMaxWidth()
             .clickable { onClick() }
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp),
 
     ) {
         Text(
@@ -174,9 +182,9 @@ fun ListItems(garage: Garage, onClick: () -> Unit) {
         )
 
         Text(text = garage.jenisMobil)
-        Text(text = garage.warnaMobil)
+        Text(text = "Warna " + garage.warnaMobil)
 
-        Text( text = "Tahun " + garage.tahunKeluaran,)
+        Text( text = "Tahun " + garage.tahunKeluaran)
         Text(
             text = garage.status,
             fontWeight = FontWeight.Bold
@@ -196,7 +204,7 @@ fun GridItem(garage: Garage, onClick: () -> Unit) {
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        border = BorderStroke(1.dp, Color.Cyan)
+        border = BorderStroke(1.dp, Purple80)
     ) {
        Column(
            modifier = Modifier.padding(8.dp),
@@ -210,8 +218,8 @@ fun GridItem(garage: Garage, onClick: () -> Unit) {
                text = garage.jenisMobil,
                overflow = TextOverflow.Ellipsis
            )
-           Text(text = garage.warnaMobil)
-           Text(text = garage.tahunKeluaran)
+           Text(text = "Warna " + garage.warnaMobil)
+           Text(text = "Tahun " + garage.tahunKeluaran)
            Text(
                text = garage.status,
                fontWeight = FontWeight.Bold
