@@ -4,9 +4,14 @@
     <string name="tombol_hapus">Hapus</string>
     <string name="tombol_batal">Batal</string>
     <string name="gambar">Gambar %1$s</string>
-    <string name="error">Terjadi kesalahan.. Perika koneksi anda!</string>
+    <string name="error">Terjadi kesalahan.. Periksa koneksi anda!</string>
     <string name="try_again">Coba lagi</string>
     <string name="profil">Profil</string>
     <string name="tutup">Tutup</string>
     <string name="logout">Logout</string>
+    <string name="tambah_design">Tambah Desain</string>
+    <string name="nama">Nama Aplikasi</string>
+    <string name="jenis">Jenis Aplikasi</string>
+    <string name="batal">Batal</string>
+    <string name="simpan">Simpan</string>
 </resources>

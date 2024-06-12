@@ -9,6 +9,8 @@ import android.graphics.ImageDecoder
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -21,9 +23,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +37,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,6 +63,9 @@ import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
@@ -81,7 +90,17 @@ fun MainScreen() {
     val dataStore = UserDataStore(context)
     val user by dataStore.userFlow.collectAsState(User())
 
+    val viewModel: MainViewModel = viewModel()
+    val errorMessage by viewModel.errorMessage
+
     var showDialog by remember { mutableStateOf(false) }
+    var showDesignDialog by remember { mutableStateOf(false) }
+
+    var bitmap: Bitmap? by remember { mutableStateOf(null) }
+    val launcher = rememberLauncherForActivityResult(CropImageContract()) {
+        bitmap = getCroppedImage(context.contentResolver, it)
+        if (bitmap != null) showDesignDialog = true
+    }
 
     Scaffold(
         topBar = {
@@ -108,9 +127,26 @@ fun MainScreen() {
                         )
                     }
                 })
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+                val optios = CropImageContractOptions(
+                    null, CropImageOptions(
+                        imageSourceIncludeGallery = false,
+                        imageSourceIncludeCamera = true,
+                        fixAspectRatio = true
+                    )
+                )
+                launcher.launch(optios)
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(R.string.tambah_design)
+                )
+            }
         }
     ) {padding ->
-        ScreenContent(Modifier.padding(padding))
+        ScreenContent(viewModel, user.email, Modifier.padding(padding))
 
         if (showDialog) {
             ProfilDiaglog(
@@ -121,15 +157,31 @@ fun MainScreen() {
                 showDialog = false
             }
         }
+        
+        if (showDesignDialog) {
+            DesignDialog(
+                bitmap = bitmap ,
+                onDismissRequest = {showDesignDialog = false}) {
+                nama, jenis -> viewModel.saveData(user.email, nama, jenis, bitmap!!)
+                showDesignDialog = false
+            }
+        }
+
+        if (errorMessage != null) {
+            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+            viewModel.clearMessage()
+        }
     }
 }
 
 @Composable
-fun ScreenContent(modifier: Modifier) {
-    val viewModel: MainViewModel = viewModel()
+fun ScreenContent(viewModel: MainViewModel, userId: String, modifier: Modifier) {
     val data by viewModel.data
     val status by viewModel.status.collectAsState()
 
+    LaunchedEffect(userId){
+        viewModel.retrieveData(userId)
+    }
     when(status) {
         ApiStatus.LOADING -> {
             Box(
@@ -145,7 +197,8 @@ fun ScreenContent(modifier: Modifier) {
                 modifier = modifier
                     .fillMaxSize()
                     .padding(4.dp),
-                columns = GridCells.Fixed(2)
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(bottom = 80.dp)
             ) {
                 items(data){ ListItem(design = it)}
             }
@@ -158,7 +211,7 @@ fun ScreenContent(modifier: Modifier) {
             ) {
                 Text(text = stringResource(R.string.error))
                 Button(
-                    onClick = {viewModel.retrieveData()},
+                    onClick = {viewModel.retrieveData(userId)},
                     modifier = Modifier.padding(top = 16.dp),
                     contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
                 ) {
@@ -253,6 +306,24 @@ private suspend fun signOut(context: Context, dataStore: UserDataStore) {
         Log.e("SIGN-IN", "Error : ${e.message}")
     }
 
+}
+private fun getCroppedImage(
+    resolver: ContentResolver,
+    result: CropImageView.CropResult
+) : Bitmap? {
+    if (!result.isSuccessful) {
+        Log.e("IMAGE", "Error: ${result.error}")
+        return null
+    }
+
+    val uri = result.uriContent ?: return null
+
+    return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+        MediaStore.Images.Media.getBitmap(resolver, uri)
+    } else {
+        val source = ImageDecoder.createSource(resolver, uri)
+        ImageDecoder.decodeBitmap(source)
+    }
 }
 
 

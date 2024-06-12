@@ -3,12 +3,19 @@ package org.d3if3066.efwangarage.network
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.d3if3066.efwangarage.model.Design
+import org.d3if3066.efwangarage.model.OpStatus
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Multipart
+import retrofit2.http.POST
+import retrofit2.http.Part
 
-private const val BASE_URL = "https://raw.githubusercontent.com/mhdanandaa/cat-API/main/"
+private const val BASE_URL = "https://unspoken.my.id/"
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
@@ -20,8 +27,19 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface DesignApiService {
-    @GET("design-api.json")
-    suspend fun getDesign() : List<Design>
+    @GET("api_fadil.php")
+    suspend fun getDesign(
+        @Header("Authorization") userId: String
+    ) : List<Design>
+
+    @Multipart
+    @POST("api_fadil.php")
+    suspend fun postDesign(
+        @Header("Authorization") userId: String,
+        @Part("nama") nama: RequestBody,
+        @Part("jenis") jenis:RequestBody,
+        @Part image: MultipartBody.Part
+    ): OpStatus
 }
 
 object DesignApi {
@@ -30,7 +48,7 @@ object DesignApi {
     }
 
     fun getDesignUrl(imageId: String): String {
-        return "$BASE_URL$imageId"
+        return "${BASE_URL}image.php?id=$imageId"
     }
 
 }
