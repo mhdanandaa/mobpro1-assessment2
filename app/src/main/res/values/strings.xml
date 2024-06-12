@@ -1,22 +1,9 @@
 <resources>
-    <string name="app_name">Efwan Garage</string>
-    <string name="tambah_mobil">Tambah Mobil</string>
-    <string name="list_kosong">Belum ada data mobil</string>
-    <string name="kembali">Kembali</string>
-    <string name="edit_mobil">Edit Keterangan Mobil</string>
-    <string name="simpan">Simpan</string>
-    <string name="merk_mobil">Merk Mobil</string>
-    <string name="jenis_mobil">Jenis Mobil</string>
-    <string name="warna_mobil">Warna Mobil</string>
-    <string name="tahun">Tahun Keluaran</string>
-    <string name="invalid">Data tidak boleh ada yang kosong!</string>
-    <string name="opsi_lainnya">Opsi Lainnya</string>
-    <string name="hapus_mobil">Hapus Mobil</string>
-    <string name="hapus_pesan">Hapus data mobil ini?</string>
+    <string name="app_name">My Design</string>>
+    <string name="hapus_pesan">Hapus desain ini?</string>
     <string name="tombol_hapus">Hapus</string>
     <string name="tombol_batal">Batal</string>
-    <string name="list">Tampilan list</string>
-    <string name="grid">Tampilan grid</string>
-    <string name="invalid_merk">Merk mobil harus mengandung huruf</string>
-    <string name="tahun_nol">Tahun tidak boleh 0</string>
+    <string name="gambar">Gambar %1$s</string>
+    <string name="error">Terjadi kesalahan.. Perika koneksi anda!</string>
+    <string name="try_again">Coba lagi</string>
 </resources>
