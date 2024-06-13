@@ -64,6 +64,21 @@ class MainViewModel: ViewModel() {
         }
     }
 
+    fun deleteData(designId: String, userId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val result = DesignApi.service.deleteDesign(userId, designId)
+                if (result.status == "success")
+                    retrieveData(userId)
+                else
+                    throw Exception(result.message)
+
+            } catch (e: Exception) {
+                Log.d("MainViewModel", "Delete Failed: ${e.message}")
+                errorMessage.value = "Error: ${e.message}"
+            }
+        }
+    }
 
     private fun Bitmap.toMultipartBody(): MultipartBody.Part {
         val stream = ByteArrayOutputStream()

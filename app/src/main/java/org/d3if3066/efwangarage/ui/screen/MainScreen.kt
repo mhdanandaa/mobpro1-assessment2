@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,6 +26,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -50,9 +52,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
@@ -200,7 +204,9 @@ fun ScreenContent(viewModel: MainViewModel, userId: String, modifier: Modifier) 
                 columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(bottom = 80.dp)
             ) {
-                items(data){ ListItem(design = it)}
+                items(data){ ListItem(design = it, onDelete = {
+                    designId -> viewModel.deleteData(designId, userId)
+                })}
             }
         }
         ApiStatus.FAILED -> {
@@ -223,7 +229,9 @@ fun ScreenContent(viewModel: MainViewModel, userId: String, modifier: Modifier) 
 }
 
 @Composable
-fun ListItem(design: Design) {
+fun ListItem(design: Design, onDelete: (String) -> Unit) {
+    var deleteDialod  by remember { mutableStateOf(false) }
+    
     Box (
         modifier = Modifier
             .padding(4.dp)
@@ -243,18 +251,51 @@ fun ListItem(design: Design) {
                 .fillMaxWidth()
                 .padding(4.dp)
         )
-        Column(
+        Row (
             modifier = Modifier
                 .fillMaxWidth()
+                //untuk padding gambar dari border
                 .padding(4.dp)
                 .background(Color(0f, 0f, 0f, 0.5f))
-                .padding(4.dp)
+                //padding untuk tulisan
+                .padding(4.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = design.nama,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(0.80f)
+            ) {
+                Text(
+                    text = design.nama,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+                Text(
+                    text = design.jenis,
+                    color = Color.White,
+                    fontStyle = FontStyle.Italic,
+                    fontSize = 14.sp,
+                    maxLines = 1
+                )
+            }
+            IconButton(onClick = {deleteDialod = true}
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            }
+            DisplayAlert(
+                openDialog = deleteDialod,
+                onDismiss = {deleteDialod = false}
+            ) {
+                deleteDialod = false
+                onDelete(design.id)
+
+            }
+
         }
     }
 }
