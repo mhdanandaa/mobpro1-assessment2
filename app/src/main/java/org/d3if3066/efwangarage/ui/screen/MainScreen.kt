@@ -54,6 +54,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -150,7 +151,7 @@ fun MainScreen() {
             }
         }
     ) {padding ->
-        ScreenContent(viewModel, user.email, Modifier.padding(padding))
+        ScreenContent(user, viewModel, user.email, Modifier.padding(padding))
 
         if (showDialog) {
             ProfilDiaglog(
@@ -179,7 +180,7 @@ fun MainScreen() {
 }
 
 @Composable
-fun ScreenContent(viewModel: MainViewModel, userId: String, modifier: Modifier) {
+fun ScreenContent(user: User, viewModel: MainViewModel, userId: String, modifier: Modifier) {
     val data by viewModel.data
     val status by viewModel.status.collectAsState()
 
@@ -197,6 +198,20 @@ fun ScreenContent(viewModel: MainViewModel, userId: String, modifier: Modifier) 
 
         }
         ApiStatus.SUCCESS -> {
+            if (user.email.isEmpty()) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = stringResource(R.string.belum_login),
+                        textAlign = TextAlign.Center
+                    )
+
+
+                }
+            } else
             LazyVerticalGrid (
                 modifier = modifier
                     .fillMaxSize()

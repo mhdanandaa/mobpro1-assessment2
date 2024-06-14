@@ -14,4 +14,5 @@
     <string name="jenis">Jenis Aplikasi</string>
     <string name="batal">Batal</string>
     <string name="simpan">Simpan</string>
+    <string name="belum_login">Silahkan login  dulu 😁</string>
 </resources>
